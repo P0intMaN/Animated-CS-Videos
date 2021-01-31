@@ -1,2 +1,2 @@
 # Animated-CS-Videos
-Culmination of codes of some animated videos I created. 
+![](https://komarev.com/ghpvc/?username=P0intMaN&label=REPO+VIEWS) 
