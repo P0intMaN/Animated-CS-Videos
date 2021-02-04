@@ -117,6 +117,8 @@ class Steps(Scene):
         self.play(ShowCreation(toolbox))
         self.wait()
 
+        
+
         ellipse=Ellipse(width=5, height=2.5, color=DARK_BLUE).scale(1.2)
         eyeball = Annulus(inner_radius=0.6, outer_radius=1, color=BLUE).scale(1.2)
         eyem = Annulus(inner_radius=0.2, outer_radius=1, color=BLUE).scale(1.2)
@@ -163,14 +165,114 @@ class Steps(Scene):
         self.play(FadeOut(info),FadeOut(toolbox),FadeOut(infos),FadeOut(rect),FadeIn(mindtree),mindtree.set_opacity,1,ReplacementTransform(reco,mindtree[0]),rect.set_opacity,1)
         self.wait()
 
+        #Scanning
+        scano = mindtree[1].copy()
+        self.play(mindtree.set_opacity,0.1,scano.set_opacity,1,scano.move_to,ORIGIN,scano.scale,1.5)        
+        self.wait()
+        self.play(scano.to_edge,UP)
+        for i in range(0,9):
+            self.play(FadeOut(mindtree[i]),run_time=0.01)
+        self.wait()
+
+        laptop = Laptop()
+        self.play(DrawBorderThenFill(laptop))
+        self.wait()
+        self.play(laptop.scale,20,laptop.shift,1.5*LEFT,laptop.rotate,-3 * TAU / 8,run_time=2)  
+        self.wait()
+              
+
+        dot = Dot(color=GREEN).move_to(ORIGIN)
+        self.add(dot)
+
+        mis = Dot(color=RED).move_to(3*RIGHT+2*UP)
+        mistext = TextMobject("Misconfigurations").scale(0.8)
+        mistext.next_to(mis,RIGHT,buff=MED_SMALL_BUFF)
+
+        self.play(ShowCreation(mis),Write(mistext))
+        legend = VGroup(mis,mistext)
+        sur = SurroundingRectangle(legend,buff=0.2,color=GOLD)
+        self.play(Write(sur))
+        self.wait()
+
+        for i in range(3):
+            r = random.randint(1,4)
+            misd = VGroup(*[Dot(color=RED) for x in range(r)])
+
+            for j in range(r):
+                dirx = random.randint(-3,3)
+                diry = random.randint(-3,3)
+                dirz = random.randint(-3,3)
+                misd[j].move_to(np.array([dirx,diry,dirz]))
+            self.play(Broadcast(dot, big_radius=5, color=GREEN, run_time=3),ShowCreation(misd,run_time=2)) 
+            self.play(FadeOut(misd))
+
+        self.wait()    
+
+        self.play(FadeOut(sur),FadeOut(legend),FadeOut(dot))
+        self.wait()
+        self.play(FadeIn(mindtree),mindtree.set_opacity,1,ReplacementTransform(scano,mindtree[1]))
+        self.wait()
+
+        # Exploitation
+        expo = mindtree[3].copy()
+        self.play(mindtree.set_opacity,0.1,expo.set_opacity,1,expo.move_to,ORIGIN,expo.scale,1.5)        
+        self.wait()
+        self.play(expo.to_edge,UP)
+        for i in range(0,9):
+            self.play(FadeOut(mindtree[i]),run_time=0.01)
+        self.wait()
+        
+        image = SVGMobject("zbunker/resources/virus.svg")
+        image.scale(0.3)
+        colors = it.cycle(["#ff0000","#000000","#000000","#000000","#000000"])
+        for i in range(len(image)):
+            color = next(colors)
+            image[i].set_color(color)
+            image[i].set_stroke(color,0)
+
+        att = TextMobject("Attacker").scale(2).set_color_by_gradient(PURPLE,GREEN)
+        self.play(DrawBorderThenFill(att))
+        self.play(att.move_to,4*LEFT)
+        image.move_to(3*LEFT)
+        attv = TexMobject("\\texttt{Mydoom.b}").set_color(YELLOW)
+        attv.move_to(ORIGIN)
+        self.play(ApplyWave(att),FadeInFrom(attv,1.5*LEFT))
         
 
+        mobile = SVGMobject("zbunker/resources/mobile.svg")
+        mobile.scale(2.5).move_to(5*RIGHT)
+        colors = it.cycle(["#000000","#434343","#9d9e9f","#b4b4b5","#c4c6c6"])
+        for i in range(len(image)):
+            color = next(colors)
+            mobile[i].set_color(color)
+            mobile[i].set_stroke(color,0)
 
-        
+        self.play(Write(mobile))
+        image.move_to(4.5*RIGHT)
+        self.play(ReplacementTransform(attv,image))        
+        self.play(FadeOut(mobile),FadeOut(att),FadeOut(image))
+        self.wait()
 
-        
+        soceng = TextMobject("Social Engineering")
+        bb = TextMobject("Bug Bounty").scale(1.5).move_to(UP).set_color(GREEN)
+        soceng.next_to(bb,DOWN,buff=MED_LARGE_BUFF).set_color(YELLOW)
+        self.play(Write(bb),run_time=2)
+        self.play(FadeInFromLarge(soceng,20,run_time=2))
+        self.wait()
+        cross = Cross(soceng,stroke_color=RED,stroke_width=6)
+        self.play(ShowCreation(cross,run_time=2))
+        self.play(FadeOut(cross),FadeOutAndShift(soceng,2*RIGHT),FadeOutAndShift(bb,3*UP))
+        self.wait()
 
+        self.play(FadeIn(mindtree),mindtree.set_opacity,1,ReplacementTransform(expo,mindtree[3]))
+        self.wait()
 
-
-
+        #persistance
+        perso = mindtree[2].copy()
+        self.play(mindtree.set_opacity,0.1,perso.set_opacity,1,perso.move_to,ORIGIN,perso.scale,1.5)        
+        self.wait()
+        self.play(perso.to_edge,UP)
+        for i in range(0,9):
+            self.play(FadeOut(mindtree[i]),run_time=0.01)
+        self.wait()
 
