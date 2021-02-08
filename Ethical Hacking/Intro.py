@@ -276,3 +276,110 @@ class Steps(Scene):
             self.play(FadeOut(mindtree[i]),run_time=0.01)
         self.wait()
 
+
+        access = TextMobject("Maintaining Access").set_color(YELLOW)
+        access.next_to(perso,4*DOWN)
+        self.play(TransformFromCopy(perso,access))
+        self.wait()
+        laptop = Laptop()
+        laptop.move_to(DOWN+3*LEFT)
+        self.play(DrawBorderThenFill(laptop))
+        self.wait()
+        
+        box = VGroup(
+            Line(ORIGIN,3*RIGHT,color =DARK_BLUE),
+            Line(3*RIGHT,3*UR,color   =DARK_BLUE),
+            Line(3*UR,3*UP,color      =DARK_BLUE),
+            Line(3*UP,ORIGIN,color    =DARK_BLUE)
+        ).scale(0.8)
+        
+        arrow = Arrow(DOWN+1.5*LEFT,DOWN+2*RIGHT,max_tip_length_to_length_ratio=0,max_stroke_width_to_length_ratio=3.8).set_color(GREEN)
+        arrow2 = Arrow(DOWN+1.5*LEFT,DOWN+2*RIGHT,max_tip_length_to_length_ratio=0,max_stroke_width_to_length_ratio=3.8).set_color(RED)
+
+        exclaim = TextMobject("!").scale(2.5).set_color_by_gradient(RED)
+        t1 = VGroup(TextMobject("Oh, Snap"),
+                    TextMobject("system's OFFLINE!")
+                    ).arrange(DOWN,buff=0.2).scale(0.5)
+
+        t2 = VGroup(TextMobject("Its back ONLINE!"),TextMobject("Grab it now!")).arrange(DOWN,buff=0.2).scale(0.5)
+
+        box.move_to(DOWN+3*RIGHT)
+        self.play(Write(arrow))
+        self.play(ShowCreation(box))
+        self.play(laptop.set_opacity,0.2,FadeIn(exclaim,run_time=0.5))
+        t1.move_to(box.get_center()).set_color_by_gradient(RED,YELLOW)
+        self.play(FadeIn(t1))        
+        self.play(ReplacementTransform(arrow,arrow2))
+        self.wait()
+        self.play(laptop.set_opacity,1)
+        t2.move_to(box.get_center()).set_color_by_gradient(GREEN,YELLOW)
+        self.play(ReplacementTransform(t1,t2))
+        self.play(FadeToColor(arrow2,GREEN),FadeOut(exclaim))
+        self.wait()
+        self.play(FadeOutAndShift(access,3*UP),FadeOutAndShift(box,3*RIGHT),FadeOutAndShift(t2,3*RIGHT),FadeOutAndShift(arrow2,3*DOWN),FadeOutAndShift(laptop,3*LEFT))
+        self.wait()
+
+        self.play(FadeIn(mindtree),mindtree.set_opacity,1,ReplacementTransform(perso,mindtree[2]))
+        self.wait()
+
+        #Covering tracks
+        covo = mindtree[4].copy()
+        self.play(mindtree.set_opacity,0.1,covo.set_opacity,1,covo.move_to,ORIGIN,covo.scale,1.5)        
+        self.wait()
+        self.play(covo.to_edge,UP)
+        for i in range(0,9):
+            self.play(FadeOut(mindtree[i]),run_time=0.01)
+        self.wait()
+        
+        fstage = TextMobject("The Final Stage").scale(4).set_color(DARK_BLUE)
+        self.play(DrawBorderThenFill(fstage),run_time=2)
+        self.wait()
+
+        evi = TextMobject("Evidence").scale(2).set_color(GOLD)
+        self.play(ReplacementTransform(fstage,evi),run_time=2)
+        self.play(FadeOut(covo))
+        self.play(evi.scale,100,evi.shift,RIGHT,run_time=5)
+        self.play(FadeToColor(evi,GREEN))
+        dust = TextMobject("Dust off all the evidences").scale(1.2).to_edge(UP).set_color(YELLOW)
+        self.play(Write(dust))
+
+        evidences = VGroup(
+            TexMobject("\\texttt{activity}"),
+            TexMobject("\\texttt{logs}"),
+            TexMobject("\\texttt{footprint}"),
+            TexMobject("\\texttt{temp files}")
+        ).set_color(RED).scale(1.5)
+
+        rem = TextMobject("Remove").to_edge(UL).shift(2*DOWN).scale(1.2)
+        self.play(Write(rem))
+        rrem = rem.copy()
+        evidences[0].move_to(ORIGIN)
+        evidences[1].move_to(DOWN+2*RIGHT)
+        evidences[2].move_to(UP+3*RIGHT)
+        evidences[3].move_to(2*DOWN+3.5*RIGHT)
+        
+        for i in range(4):
+            self.play(AddTextWordByWord(evidences[i]),run_time=1.5)
+        
+        self.wait()
+
+        for i in range(4):
+            self.play(evidences[i].next_to,rrem,2*DOWN,evidences[i].scale,0.5,)
+            rrem = evidences[i]
+            
+        self.wait()
+        self.play(FadeOut(evidences),FadeOut(rem),FadeOut(dust),FadeOut(rrem))
+        self.play(evi.scale,0.02,run_time=5)
+        self.play(FadeToColor(evi,GOLD),FadeIn(covo))
+        cross = Cross(evi,stroke_color=RED,stroke_width=6)
+        self.play(ShowCreation(cross))
+
+        self.wait()
+
+        self.play(FadeOut(cross),FadeOut(evi))
+
+
+        self.play(FadeIn(mindtree),mindtree.set_opacity,1,ReplacementTransform(covo,mindtree[4]))
+        self.wait(10)
+
+
