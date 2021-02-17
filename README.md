@@ -1,2 +1,2 @@
 # Animated-CS-Videos
-![](https://komarev.com/ghpvc/?username=P0intMaN&label=REPO+VIEWS) 
+[![Author - P0intMaN](https://img.shields.io/badge/Author-P0intMaN-2ea44f)](https://github.com/P0intMaN)
